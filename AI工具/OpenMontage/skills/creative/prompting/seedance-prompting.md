@@ -49,7 +49,7 @@ When using reference audio (up to 3 clips on reference-to-video), **attach each 
 - **Speaker has dialogue in this track** → upload + bind the voice reference in that track's prompt block (e.g. `@音频1 = 强哥四川话音色参考`).
 - **Speaker is on-screen but mouth closed / no VO in this track** → do **not** upload or cite their voice reference on that track; other speakers use independent generated voices.
 - **Never spread one voice reference across speakers** — e.g. do not cite 强哥 audio on an aunt-only track; it pulls non-主角 voices toward the reference timbre.
-- **强哥 dialogue = Sichuanese (四川话)** — default **成都温江本地口音**. When 强哥 has lip-sync lines: bind `@音频1 = 强哥四川话音色参考`; add delivery line `强哥口播：四川话男声`; tag 强哥 beats with `——四川话`; include `禁止普通话念稿` in the `@音频1` binding. See `.cursor/rules/open-montage-video-prompts.mdc` § **强哥口播 · 四川话铁律**.
+- **强哥 dialogue = Sichuanese (四川话)** — default **成都温江本地口音**. When 强哥 has lip-sync lines: bind `@音频1 = 强哥四川话音色参考`; add delivery line `强哥口播：四川话男声`; tag 强哥 beats with `——四川话`; include `禁止普通话念稿` in the `@音频1` binding. See `.cursor/rules/seedance-delivery-block.mdc` § **强哥口播 · 四川话铁律**.
 
 Split-track prompts (`talk-multi`): list upload assets **per track**; a global asset table must mark `仅轨 N` when shared image refs apply to all tracks but audio refs do not.
 
@@ -63,20 +63,73 @@ Split-track prompts (`talk-multi`): list upload assets **per track**; a global a
 
 **Generalize:** Any continuation frame (I2V chain, video extend, last-frame-as-first-frame) → trust uploaded frame, describe **only new motion/dialogue**; run **standalone paste test** per track.
 
-See `.cursor/rules/open-montage-video-prompts.mdc` § **交付块逻辑自检** for full checklist.
+See `.cursor/rules/seedance-delivery-block.mdc` § **交付块逻辑自检** for full checklist.
 
-**Delivery text vs spec:** Audio mount rules (which track gets `@音频1`) belong in the `[H]` upload table — not as negation lines inside the copy block. The copy block states positive bindings only (track 2: `@音频1 = 强哥四川话音色参考；强哥口播对口型，成都温江四川话…`; track 1: omit `@音频` and describe `阿姨口播：四川话女声`). **Any track with 强哥 lip-sync** must also include `强哥口播：四川话男声` and mark 强哥 beats `——四川话`. **Speech-rate planning** (`6字/秒含标点`, word-count ÷6, `90字15.0秒`) stays in `[H]` only — not in the copy block.
+**Delivery text vs spec:** Audio mount rules (which track gets `@音频1`) belong in the `[H]` upload table — not as negation lines inside the copy block. The copy block states positive bindings only (track 2: `@音频1 = 强哥四川话音色参考；强哥口播对口型，成都温江四川话…`; track 1: omit `@音频` and describe `阿姨口播：四川话女声`). **Any track with 强哥 lip-sync** must also include `强哥口播：四川话男声` and mark 强哥 beats `——四川话`. **Speech-rate planning** (`6字/秒含标点`, word-count ÷6) stays in `[H]` only — not in the copy block.
 
-**Reference tags once:** Each `@图片` / `@音频` line appears **only in the top binding section** — **no `【参考绑定】` header row**. Beats and scene paragraphs use direct description (`强哥——五官脸型短发工服男——`) — no repeated `@` or "consistent with @图片N".
+**15s 口播字数铁律（与 `.cursor/rules/seedance-delivery-block.mdc` 同步）：** 单轨 **15 秒** 定稿台词必须 **90～93 字（含标点）** —— 铺满 15 秒；**少于 90 字不行**，**多于 93 字必须拆轨**。其他时长按「字数 ÷ 6 ≈ 秒数」换算，单轨仍 ≤15 秒 · ≤93 字。
+
+**禁止叠说 · 动作预留时间（与 `.cursor/rules/seedance-delivery-block.mdc` § 口播 · 禁止叠说 · 动作预留时间 同步）：**
+
+1. **零叠说（人）**：同一时刻仅一人出声；交接秒其他人嘴闭。
+2. **零叠说（动作）**：禁止同一 `X至Y秒` 内既写大动作又写开口（「转身冲上扶住」+「说：」同段 = 翻车）。
+3. **动作窗必留**：滑倒 / 碰头 / 扶人到位 / 出画 / 拨号贴耳 / 听对方 等必须单独 `无口播` 秒段，完成后再开口。
+4. **预算**：口播秒 = 字数÷6；**动作空窗预算 = 轨时长 − 口播秒**；先锁动作窗再排口播。动作不够 → 加时长或拆轨，禁止挤进口播段。
+5. **伴随手势可同段**（点头、指一下、轻拍胸口）；**大位移不可同段**。
+6. **口播段写法**：起句写完成态（「已扶住」「手机已贴耳」）再 `说：`。
+
+**Reference tags once:** Each `@图片` / `@音频` line appears **only in the top binding section** — **no `【参考绑定】` header row**. After binding, describe subjects by **role name** — no repeated `@` or "consistent with @图片N".
+
+**Identity once, then name:** Appearance anchors (e.g. `五官脸型短发工服男`, supporting cast wardrobe) appear **once** in the binding line and/or overview / first entrance (`强哥（五官脸型短发工服男）…`). Later beats use **only the role name** (`强哥` / `大哥` / `大姐`). Do **not** paste the full appearance string every beat. Prefer role names over「他 / 同一人」when multiple people share the frame. Same for supporting cast: full look on first beat, then short names + short constraints (`嘴闭`).
 
 **Copy block structure (Chinese repo `-生视频提示词.md`):**
 
 - No `【】` section headers; beats start with `X.XX至X.XX秒，`.
-- Optional first line: `禁止字幕，禁止背景音乐。`
 - Micro-motion: `自然眨眼每3～5秒` inline in overview or beats — not a `【微动·A线】` block.
 - Lip-sync lock: `以上口型与台词一字不改：「…」` as one closing sentence.
+- Final line after lip-sync lock: `禁止字幕，禁止背景音乐，禁止水印。` (only these three negations belong in the copy block; place at the end, not the top).
+- **Cast / who is on screen — positive only:** Write who *is* in frame (`画中是阿姨与老头两人` / `画中是强哥一人`). Do **not** put exclusion lines in the copy block (`无强哥入画` / `无工人` / `无其他人物入画` / `禁止路人入画`). Those constraints belong in `[H]` (upload table, failure fixes) plus simply not mounting unused character refs. Naming absent roles distracts the model.
 
-See `.cursor/rules/open-montage-video-prompts.mdc` for full delivery checklist.
+See `.cursor/rules/seedance-delivery-block.mdc` § **人数 / 入画 · 只写有谁** for the full rule.
+
+## Background / environment reference (`@图片1`)
+
+When the project supplies an environment reference image, **bind it — do not transcribe the photo** in the delivery copy block.
+
+| Allowed in `@图片1` binding | Forbidden in binding + beats |
+| --- | --- |
+| `翻新厨房背景，全程不换景。` | 白色橱柜、灰色墙砖、暖黄灯带、马桶/台盆位置… |
+| `厕所背景，全程不换景。` | `与参考图几何一致` · `墙地柜体与参考图一致` |
+| Named community gate / building sign: scene name + `大门招牌「小区名」字型稳定可读` | Materials, colors, brick texture, light strips, geometry catalogs |
+| `[H]` upload table may list filename for humans | Repeating reference materials, colors, fixtures, lighting strips |
+
+**Named gate / sign readability (required):** When the shot is a **named community gate** or a **named building/mall sign** that must stay readable on camera, `@图片1` **must** lock the sign text — same idea as `@图片3` requiring readable「大改造家」. Writing only `XX大门背景，全程不换景` is **not enough**.
+
+```text
+@图片1 = 友谊花园大门背景，大门招牌「友谊花园」字型稳定可读，全程不换景。
+```
+
+Indoor kitchen/bath/stair scenes with no readable sign still use scene name + 不换景 only.
+
+**Narrative blocking is fine** (e.g. 强哥在淋浴隔间内、推开玻璃门) — that is action/staging, not a reference-image catalog. If layout must stay locked, rely on the uploaded `@图片1`; do not substitute a prose floor plan.
+
+**No faces from the reference photo:** `@图片1` locks environment only; do not inherit any person visible in the reference image.
+
+## Workwear / Logo reference (`@图片3`)
+
+When the project supplies a brand Logo image for 强哥's workwear, bind color + chest mark and **require readable brand text**:
+
+```text
+@图片3 = 仅作工服颜色与左胸Logo参考，「大改造家」字体稳定可读。
+```
+
+| Layer | Wording |
+| --- | --- |
+| `[H]` upload table | `Logo 图 · 仅作工服颜色与左胸 Logo 参考，「大改造家」字体稳定可读` |
+| Delivery binding | `@图片3 = 仅作工服颜色与左胸Logo参考，「大改造家」字体稳定可读。` |
+| QC | Left-chest「大改造家」stable and readable — not blurry / missing glyphs |
+
+Longer bindings that also lock workwear fill to the Logo background color are fine (e.g. `短袖工服颜色参考logo背景色，工服左胸有logo，「大改造家」字型稳定可读`), but **do not drop** the readable「大改造家」requirement. See `.cursor/rules/seedance-delivery-block.mdc` § **工服 Logo · 绑定铁律**.
 
 ## Multi-shot pattern
 

@@ -289,17 +289,17 @@ The copy block describes **what to generate**, not workflow rules or corrections
 **Structure (this repo):**
 
 - **No `【…】` section headers** — no `【参考绑定】`, `【摄影·运镜】`, `【微动·A线】`, `【约束护栏】`, or beat label lines like `0.00-3.00秒·钩子【18字】`.
-- **Top**: optional first line `禁止字幕，禁止背景音乐。` (allowed exception for output bans only).
-- **Bindings**: `@图片` / `@音频` lines immediately after, **without** a header row.
+- **Bindings**: `@图片` / `@音频` lines at the top, **without** a header row.
 - **Scene + camera + micro-motion**: merged into flowing direct-description sentences.
 - **Beats**: each starts with **`X.XX至X.XX秒，`** then performance + `阿姨说` / `强哥说`.
 - **Lip-sync lock**: one closing sentence `以上口型与台词一字不改：「…」` — not a standalone titled block.
+- **Final line** (after lip-sync lock): `禁止字幕，禁止背景音乐，禁止水印。` — only these three output bans belong in the copy block; place at the end, not the top.
 
 | Put in delivery text | Keep in `[H]` spec only |
 | --- | --- |
-| First line `禁止字幕，禁止背景音乐。` | Other constraint rails piled at block end |
+| Final line `禁止字幕，禁止背景音乐，禁止水印。` (after lip-sync lock) | Other constraint rails piled in the middle of the block |
 | Reference bindings (`@图片2 = …`) without header | "Do not upload @audio on this track" |
-| Speaker voice as positive (`阿姨口播：四川话女声` / `强哥口播：四川话男声`) | Speech-rate math (`6字/秒含标点`, `90字15.0秒`, `字数÷6`); "Do not imitate 强哥 voice" |
+| Speaker voice as positive (`阿姨口播：四川话女声` / `强哥口播：四川话男声`) | Speech-rate math (`6字/秒含标点`, **15s 须 90～93 字**, `字数÷6`); "Do not imitate 强哥 voice" |
 | 强哥 beat performance + `——四川话` after `强哥说` | `Character says` in English |
 | On-screen state (`强哥后方嘴闭验厨`) | `【约束护栏】` sections |
 | `0.00至3.00秒，阿姨说：「…」` timestamp beats | Beat label rows with word-count tags |
@@ -314,12 +314,24 @@ The copy block describes **what to generate**, not workflow rules or corrections
 
 Inside a delivery copy block, **`@图片` / `@音频` / `{{Mixed N}}` appear only in the opening reference-binding section** — once per asset. After that section (scene overview, camera, beats), describe subjects and settings **directly**; do not repeat `@` tags or phrases like "consistent with @图片2".
 
-| Binding block (only place for `@`) | After binding (plain description) |
+| Binding / overview (appearance once) | Later beats (role name only) |
 | --- | --- |
-| `@图片2 = 强哥五官脸型发型；五官脸型短发工服男，maintain exact appearance…` | `强哥——五官脸型短发工服男——后方嘴闭验厨` |
+| `@图片2 = 强哥五官脸型发型；五官脸型短发工服男，保持同一人物身份。` + 总述 `强哥（五官脸型短发工服男）…` | `强哥后方嘴闭验厨` / `强哥对镜说：「…」` |
 | `@图片1 = 新华苑改完厨房…` | `改完厨房自然窗光，明亮整洁` |
+| 首段定妆 `大哥（55至65岁短袖T恤男）` | 之后只写 `大哥` / `嘴闭` |
 
-Identity still repeats in beats as **plain text** (hair, clothing, marks) — just not as `@` references.
+### Background reference (`@图片1`): bind only, do not describe
+
+For environment/background reference images in `-生视频提示词.md` delivery blocks:
+
+- **Binding line only:** `{{场景}}背景，全程不换景。` (e.g. `翻新厨房背景` · `厕所背景` · `小区大门背景`)
+- **Do not** list colors, materials, appliances, tile patterns, or layout coordinates from the reference photo
+- **`[H]` upload table** may name the file for humans; that detail does not go into the copy block
+- **Staging beats** may name functional zones (淋浴隔间、玻璃门) for action — not a substitute for uploading `@图片1`
+
+See `.cursor/rules/seedance-delivery-block.mdc` § **背景图 · 绑定铁律**.
+
+**Identity:** anchor appearance **once** (binding + overview / first entrance); later beats use **role names** only — not full hair/clothing strings every beat, and not `@` tags.
 
 ### Repo delivery language: Chinese
 
@@ -336,7 +348,7 @@ The model receives **only that track's copy block + uploads**. It never sees oth
 | Fail if copy block contains… | Fix |
 | --- | --- |
 | Track labels (`轨1`, `上一段`, `末帧截图来源`) | Move workflow to `[H]` only |
-| Speech-rate math (`6字/秒`, `90字15.0秒`) | Keep in `[H]` only |
+| Speech-rate math (`6字/秒`, **15s = 90～93 字**) | Keep in `[H]` only |
 
 ### Continuation frame: trust the image
 
@@ -364,7 +376,7 @@ Foreground in a selfie belongs to the **phone rig**, not a second person "taking
 | Handheld selfie | 微晃、不推近、不变焦、机位固定手臂长度 | 缓慢推近、拉远、dolly、变焦 |
 | Mounted / crew | dolly in/out, push-in, truck | handheld micro-shake without stating POV change |
 
-Full checklist: `.cursor/rules/open-montage-video-prompts.mdc` § **交付块逻辑自检**.
+Full checklist: `.cursor/rules/seedance-delivery-block.mdc` § **交付块逻辑自检**.
 
 ## What to Avoid
 
