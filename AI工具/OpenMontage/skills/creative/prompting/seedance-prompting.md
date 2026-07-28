@@ -53,15 +53,15 @@ When using reference audio (up to 3 clips on reference-to-video), **attach each 
 
 Split-track prompts (`talk-multi`): list upload assets **per track**; a global asset table must mark `仅轨 N` when shared image refs apply to all tracks but audio refs do not.
 
-**Handheld continuation (track 2):** When both tracks are 业主阿姨 handheld selfie POV, generate track 1 first, capture its **last frame**, upload as track-2 `@图片N` (e.g. `@图片5`) with `@图片N = 作为首帧` + **以参考图为准**. Track 2 **does not** re-upload the aunt portrait ref. **Optional:** re-upload the environment ref (e.g. `@图片1 = 背景环境参考`) alongside the first-frame screenshot — **roles must differ**: screenshot = **作为首帧** (composition/camera/positions); environment ref = **背景环境参考** only (kitchen/cabinet detail), never also「作为首帧」. Keep 强哥 `@图片2` on track 2.
+**Same-scene dual tracks (track 2):** When dialogue is split across tracks in the **same location**, generate each track **independently**. Share only the environment ref (`@图片1` = same kitchen/gate/etc.). **Do not** capture track-1 last frame as track-2 first frame. **Do not** use `@图片N = 作为首帧` / 「以参考图为准」 / 「构图站位与首帧一致」. **Never upload an owner/aunt portrait ref on any track** — cast look is plain-text in `[H] 配角定妆` **and** rewritten in **each** track's copy block overview. Keep 强哥 `@图片2` / `@图片3` on tracks where he appears.
 
-**Track-2 copy block must stand alone:** Pasted into Seedance **without** track 1 or `[H]` context. **No**「轨1」「上一段」「末帧截图来源」. **Do not** spell out aunt appearance/pose — track 1 output may drift; trust the screenshot.
+**Track-2 copy block must stand alone:** Pasted into Seedance **without** track 1 or `[H]` context. **No**「轨1」「上一段」「末帧截图」「续拍」。Spell out owner/aunt look and blocking again (plain text) — there is no continuation screenshot to trust.
 
 **Handheld selfie spatial logic:** Camera is in the aunt's hand (fixed arm-length rig). 强哥 does **not**「占自拍前景 / 占主画面」. Write: **自画面后方景深向镜头方向走来，至中近景正对镜头口播** — subject gets larger via perspective, camera does not hand off.
 
 **Handheld selfie camera logic:** Allowed: 微晃、不推近、不变焦、机位固定手臂长度. **Forbidden** in same block: 缓慢推近/拉远、dolly、变焦 — those imply tripod/camera crew, not phone selfie.
 
-**Generalize:** Any continuation frame (I2V chain, video extend, last-frame-as-first-frame) → trust uploaded frame, describe **only new motion/dialogue**; run **standalone paste test** per track.
+**Generalize:** Dual-track splits = **same scene, independent takes**, hard-cut in edit. Only use last-frame-as-first-frame if the user **explicitly** asks for true I2V continuation; default for talk-multi is **no continuation**. Always run **standalone paste test** per track.
 
 See `.cursor/rules/seedance-delivery-block.mdc` § **交付块逻辑自检** for full checklist.
 
@@ -115,21 +115,38 @@ Indoor kitchen/bath/stair scenes with no readable sign still use scene name + �
 
 **No faces from the reference photo:** `@图片1` locks environment only; do not inherit any person visible in the reference image.
 
+## Owner / supporting cast — never upload person refs
+
+业主、阿姨、老头、邻居、夫妻等 **non-强哥** roles: **never upload** a portrait/wardrobe reference image on any track.
+
+| Layer | Rule |
+| --- | --- |
+| `[H]` | Add `## [H] 配角定妆（明文 · 不进参考图槽）` with age / hair / **家常衣** / voice; mark **不上传人物图** |
+| Upload table | No owner/aunt `@图片N` face slot. Continuation last-frame screenshot ≠ portrait ref |
+| Copy block | Plain-text wardrobe once in overview (`家常衣` / `家常短袖`); no `@` person binding for them |
+| Forbidden | 「可选上传业主图」「不传则明文」— always plain-text, never optional upload |
+
+See `.cursor/rules/seedance-delivery-block.mdc` § **业主/配角 · 永不上传人物参考**.
+
 ## Workwear / Logo reference (`@图片3`)
 
-When the project supplies a brand Logo image for 强哥's workwear, bind color + chest mark and **require readable brand text**:
+**Workwear is 强哥-only.** Owner/supporting cast wear civilian/home clothes. `@图片3` must not spread Logo/workwear onto non-强哥 roles.
+
+When the project supplies a brand Logo image for 强哥's workwear, bind color + chest mark, **require readable brand text**, and lock **仅强哥穿着**:
 
 ```text
-@图片3 = 仅作工服颜色与左胸Logo参考，「大改造家」字体稳定可读。
+@图片3 = 仅作工服颜色与左胸Logo参考，「大改造家」字体稳定可读；仅强哥穿着。
 ```
 
 | Layer | Wording |
 | --- | --- |
-| `[H]` upload table | `Logo 图 · 仅作工服颜色与左胸 Logo 参考，「大改造家」字体稳定可读` |
-| Delivery binding | `@图片3 = 仅作工服颜色与左胸Logo参考，「大改造家」字体稳定可读。` |
-| QC | Left-chest「大改造家」stable and readable — not blurry / missing glyphs |
+| `[H]` upload table | `Logo 图 · 仅作工服颜色与左胸 Logo 参考，「大改造家」字体稳定可读 · 仅强哥穿着` |
+| `[H]` cast table | 强哥: `@图片2/@图片3` face+workwear; owner/cast: 家常衣 · **不穿工服** |
+| Delivery binding | `@图片3 = 仅作工服颜色与左胸Logo参考，「大改造家」字体稳定可读；仅强哥穿着。` |
+| Delivery cast | 强哥: `五官脸型短发工服男`; owner/cast: positive `家常衣` / `家常短袖` (do **not** put「禁止工服」inside the copy block — keep that constraint in `[H]`) |
+| QC | Left-chest「大改造家」stable and readable — not blurry / missing glyphs; **only 强哥 wears workwear** |
 
-Longer bindings that also lock workwear fill to the Logo background color are fine (e.g. `短袖工服颜色参考logo背景色，工服左胸有logo，「大改造家」字型稳定可读`), but **do not drop** the readable「大改造家」requirement. See `.cursor/rules/seedance-delivery-block.mdc` § **工服 Logo · 绑定铁律**.
+Longer bindings that also lock workwear fill to the Logo background color are fine (e.g. `短袖工服颜色参考logo背景色，工服左胸有logo，「大改造家」字型稳定可读；仅强哥穿着`), but **do not drop** the readable「大改造家」requirement or **仅强哥穿着**. See `.cursor/rules/seedance-delivery-block.mdc` § **工服 Logo · 绑定铁律**.
 
 ## Multi-shot pattern
 
