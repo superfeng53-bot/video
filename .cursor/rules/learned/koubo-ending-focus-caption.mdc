@@ -1,0 +1,19 @@
+---
+description: 口播/旧改成片结尾重点展示型字幕：画面高度18%两行、下行更大、左右留白；对齐旧房换新业务重点标准。
+globs:
+  - "**/hyperframes-成片/**"
+  - "项目/**/hyperframes*/**"
+  - ".cursor/skills/hyperframes-koubo-chengpian/**"
+alwaysApply: false
+---
+
+# 结尾重点展示型字幕
+
+做片尾区域/业务导流重点字时：
+
+1. 位置定在画面高度 **18%**（`top≈346px` @1920）；以不挡脸为准。
+2. **两行**：上行区域铺垫（强调色 `#FFD166`，约 70px）；下行业务主卖点（**更大**约 84px + 白字重描边）。
+3. **左右留白** ≥80px，禁止左右抵满；先删字再缩字号。
+4. 可与底部口播字幕并存；重点板自 CTA 起接到片尾。
+5. GSAP 勿对 `.clip` 动画 `visibility`。
+6. 细则与骨架：`.cursor/skills/hyperframes-koubo-chengpian/references/ending-focus-caption.md`。

@@ -1,0 +1,16 @@
+---
+description: HyperFrames 口播字幕禁止拆词硬切；换母片必须重抽音轨。在改 captions.json / 口播成片 HTML 时使用。
+globs:
+  - "**/hyperframes-*/**"
+  - "**/assets/captions.json"
+  - "**/成片/**"
+alwaysApply: false
+---
+
+# HyperFrames 口播字幕硬规则
+
+- 字幕按**语义行**断句，不要按固定字数贪心硬切。
+- 禁止拆开：`公司` `一直` `提前` `设计师` `墙体` `30%以上` 等完整词。
+- 字幕对齐的音轨必须来自**当前母片**；更换 `.mov/.mp4` 后先重抽 `vo.wav`。
+- 指定跳过的旁白段（如报告数据句）整段不加字幕，且不要把该段时长算进后续句的全局比例分配。
+- 完整流程见 skill：`hyperframes-koubo-chengpian`。
